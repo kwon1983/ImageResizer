@@ -848,14 +848,6 @@ var ImageResizer = (function() {
             resizeCtx = resizeCanvas.getContext('2d'),
             ctx = canvas.getContext('2d');
 
-        var w = option.width,
-            h = option.height;
-
-        if(!w || !h) {
-            w = canvas.width * option.ratio;
-            h = canvas.height * option.ratio;
-        }
-
         resizeCanvas.width = canvas.width;
         resizeCanvas.height = canvas.height;
 
@@ -892,6 +884,22 @@ var ImageResizer = (function() {
         }
 
         resizeCtx.drawImage(canvas, 0, 0);
+
+        var w = option.width,
+            h = option.height;
+
+        if(w && !h) {
+            option.ratio = w / resizeCanvas.width > 1 ? 1 : w / resizeCanvas.width;
+        }
+
+        if(h && !w) {
+            option.ratio = h / resizeCanvas.height > 1 ? 1 : h / resizeCanvas.height;
+        }
+
+        if(option.ratio) {
+            w = resizeCanvas.width * option.ratio;
+            h = resizeCanvas.height * option.ratio;
+        }
 
         canvas.width = w;
         canvas.height = h;
